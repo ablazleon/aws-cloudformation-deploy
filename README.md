@@ -3,6 +3,11 @@
 ***aws-cloudformation-deploy*** script allows deploying a High-Availability Web App using CloudFormation.
 
 ## 1. Get Started
+### a. Requirements. 
+#### I. Specs
+#### II. Rubric
+### b. System architecture
+### c. Steps
 ## 2. Usage
 ## 3. Contributing
 ## 4. License
@@ -91,6 +96,25 @@ Bonus
 
 ### b. System architecture
 
+### c. Steps
+
+1. Set up aws cli and user
+    1. Create an user for testing this deployment
+    2. Install aws cli, and run in powershell in this folder "aws --version"
+    3. aws configure, with secret key of the user created
+    4. aws s3 ls, to check setup
+2. Try running an easy cloud formation stack
+3. Write an .sh that run the yml
+4. Do teh server specs
+5. Do teh security groups and roles
+6. Do the other considerations
 ## 2. Usage
+
+This shell script deploy the system architecture described
+
+```bash
+pip install foobar
+```
+
 ## 3. Contributing
 ## 4. License
