@@ -30,7 +30,6 @@ Parameters:
     Type: String
     Default: 'udacity-dev-ops'
 
-
 Resources:
   SecurityGroupLoadBalancer:
     Type: AWS::EC2::SecurityGroup
@@ -110,7 +109,6 @@ Resources:
 
   WebAppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: AttachVpnGateway
     Properties:
       HealthCheckIntervalSeconds: 10
       HealthCheckPath: /
@@ -143,6 +141,7 @@ Resources:
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: AttachVpnGateway
     Properties:
       Subnets:
       - Fn::ImportValue: !Sub "${ProjectName}-PUB-SN-1"
