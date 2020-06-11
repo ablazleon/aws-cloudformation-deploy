@@ -110,6 +110,7 @@ Resources:
 
   WebAppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: AttachVpnGateway
     Properties:
       HealthCheckIntervalSeconds: 10
       HealthCheckPath: /
