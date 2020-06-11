@@ -98,6 +98,8 @@ Bonus
 
 ### b. System architecture
 
+![System Architecture](AWS-HA.png)
+
 ### c. Steps
 
 1. Set up aws cli and user
