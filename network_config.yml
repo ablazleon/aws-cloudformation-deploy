@@ -1,32 +1,32 @@
 Description: >
-  Network is configured
-
+  Network infrastructure is configured.
 Parameters:
-    ProjectName:
-        Description: An environment name that will be prefixed to resource names
-        Type: String
-    VpcCIDR:
-        Description: Please enter the IP range (CIDR notation) for this VPC
-        Type: String
-        Default: 10.0.0.0/16
-    PrivateSubnet1CIDR:
-        Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
-        Type: String
-        Default: 10.0.2.0/24
-    PrivateSubnet2CIDR:
-        Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
-        Type: String
-        Default: 10.0.3.0/24
-    PublicSubnet1CIDR:
-      Description: CIDR Block for public subnet 1
-      Type: String
-    PublicSubnet2CIDR:
-      Description: CIDR Block for public subnet 2
-      Type: String
-    OnPremGateway:
-        Description: Please enter the IP address of the on-prem VPN Appliance
-        Type: String
-        Default: 1.2.3.4
+  ProjectName:
+    Description: Project name prefixed to resource names
+    Type: String
+
+  VpcCIDR:
+    Description: CIDR Block for the VPC
+    Type: String
+    Default: 10.0.0.0/16
+
+  PublicSubnet1CIDR:
+    Description: CIDR Block for public subnet 1
+    Type: String
+
+  PublicSubnet2CIDR:
+    Description: CIDR Block for public subnet 2
+    Type: String
+
+  PrivateSubnet1CIDR:
+    Description: CIDR Block for private subnet 1
+    Type: String
+
+  PrivateSubnet2CIDR:
+    Description: CIDR Block for private subnet 2
+    Type: String
+
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -37,27 +37,18 @@ Resources:
         - Key: Name
           Value: !Ref ProjectName
 
-  PrivateSubnet1:
-    Type: AWS::EC2::Subnet
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
     Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      CidrBlock: !Ref PrivateSubnet1CIDR
-      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Sub ${ProjectName} Private Subnet (AZ1)
+          Value: !Ref ProjectName
 
-  PrivateSubnet2:
-    Type: AWS::EC2::Subnet
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
     Properties:
+      InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      CidrBlock: !Ref PrivateSubnet2CIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${ProjectName} Private Subnet (AZ2)
 
   PublicSubnet1:
     Type: AWS::EC2::Subnet
@@ -81,21 +72,100 @@ Resources:
         - Key: Name
           Value: !Sub ${ProjectName} Public Subnet 2 (AZ2)
 
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} Private Subnet 1 (AZ1)
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Ref PrivateSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} Private Subnet 2 (AZ2)
+
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: "vpc"
+
+  NatGateway2EIP:
+      Type: AWS::EC2::EIP
+      DependsOn: InternetGatewayAttachment
+      Properties:
+        Domain: "vpc"
+
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} NAT Gateway 1 (AZ1)
+
+  NatGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} NAT Gateway 2 (AZ1)
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} Public Route Table
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
   PrivateRouteTable1:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${ProjectName} Private Routes (AZ1)
+          Value: !Sub ${ProjectName} Private Route Table 1 (AZ1)
 
-  DefaultPrivateRoute1:
-    DependsOn: AttachVpnGateway
+  PrivateRoute1:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref VPCVGW
+      NatGatewayId: !Ref NatGateway1
 
   PrivateSubnet1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -109,15 +179,14 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${ProjectName} Private Routes (AZ2)
+          Value: !Sub ${ProjectName} Private Route Table 2 (AZ2)
 
-  DefaultPrivateRoute2:
-    DependsOn: AttachVpnGateway
+  PrivateRoute2:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref VPCVGW
+      NatGatewayId: !Ref NatGateway2
 
   PrivateSubnet2RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -125,41 +194,6 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivateSubnet2
 
-  OurVPN:
-    Type: "AWS::EC2::VPNConnection"
-    Properties:
-      Type: ipsec.1
-      StaticRoutesOnly: true
-      CustomerGatewayId:
-        !Ref ONPREMCGW
-      VpnGatewayId:
-        !Ref VPCVGW
-
-  VPCVGW:
-    Type: "AWS::EC2::VPNGateway"
-    Properties:
-      Type: ipsec.1
-      Tags:
-        - Key: Name
-          Value: !Sub "${ProjectName} Amazon-side Gateway"
-
-  AttachVpnGateway:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId:
-        !Ref VPC
-      VpnGatewayId:
-        Ref: VPCVGW
-
-  ONPREMCGW:
-    Type: "AWS::EC2::CustomerGateway"
-    Properties:
-      BgpAsn: 65000
-      IpAddress: !Ref 'OnPremGateway'
-      Tags:
-        - Key: Name
-          Value: !Sub "${ProjectName} On Prem Gateway"
-      Type: ipsec.1
 
 Outputs:
   VPC:
@@ -167,6 +201,12 @@ Outputs:
     Value: !Ref VPC
     Export:
       Name: !Sub ${ProjectName}-VPCID
+
+  VPCPublicRouteTable:
+    Description: Public Routing
+    Value: !Ref PublicRouteTable
+    Export:
+      Name: !Sub ${ProjectName}-PUB-RT
 
   VPCPrivateRouteTable1:
     Description: Private Routing AZ1

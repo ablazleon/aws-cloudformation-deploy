@@ -1,5 +1,5 @@
 Description: >
-  Servers, security groups and load-balance are configured.
+  Server, security, and load-balance are configured.
 Parameters:
   ProjectName:
     Description: Project name prefixed to resource names.
@@ -29,6 +29,7 @@ Parameters:
     Description: Name of key-pair (PEM) file.
     Type: String
     Default: 'udacity-dev-ops'
+
 
 Resources:
   SecurityGroupLoadBalancer:
@@ -141,7 +142,6 @@ Resources:
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    DependsOn: AttachVpnGateway
     Properties:
       Subnets:
       - Fn::ImportValue: !Sub "${ProjectName}-PUB-SN-1"
@@ -236,6 +236,7 @@ Resources:
           Resource: "*"
       Roles:
       - Ref: S3BucketRole
+
 
 Outputs:
   LoadBalancerDNSName:
