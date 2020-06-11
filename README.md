@@ -2,6 +2,9 @@
 
 ***aws-cloudformation-deploy*** script allows deploying a High-Availability Web App using CloudFormation.
 
+ ***Credits***
+Udacity Cloud DevOps Nanodegree Program
+
 ## 1. Get Started
 ### a. Requirements. 
 #### I. Specs
@@ -22,14 +25,14 @@ A system architecture is first identified from the requreiments and then written
 
 #### I. Specs
 
-- [ ] Server specs
+- [x] Server specs
 
 
 You'll need to create a Launch Configuration for your application servers in order to deploy four servers, two located in each of your private subnets. The launch configuration will be used by an auto-scaling group.
 
 You'll need two vCPUs and at least 4GB of RAM. The Operating System to be used is Ubuntu 18. So, choose an Instance size and Machine Image (AMI) that best fits this spec. Be sure to allocate at least 10GB of disk space so that you don't run into issues. 
 
-- [ ] Security Groups and Roles
+- [x] Security Groups and Roles
 
 
 Since you will be downloading the application archive from an S3 Bucket, you'll need to create an IAM Role that allows your instances to use the S3 Service.
@@ -44,7 +47,7 @@ One of the output exports of the CloudFormation script should be the public URL 
 
 Bonus points if you add http:// in front of the load balancer DNS Name in the output, for convenience.
 
--[ ] Other Considerations
+-[x] Other Considerations
 
 
 You can deploy your servers with an SSH Key into Public subnets while you are creating the script. This helps with troubleshooting. Once done, move them to your private subnets and remove the SSH Key from your Launch Configuration.
@@ -72,26 +75,26 @@ Last thing: Remember to delete your CloudFormation stack when you're done to avo
 
 The basics
 
--[ ] ***Parameters***: The more the better, but an exaggerated number of parameters can be messy ( say, 10 or more ). 1 or 0 is definitely lacking.
--[ ] ***Resources***: This is the mandatory section of the script, we are looking for a LoadBalancer, Launch Configuration, AutoScaling group a health check, security groups and a Listener and Target Group.
--[ ] ***Outputs***: This is optional, but it would be nice to have a URL here with the Load Balancer DNS Name and “http” in front of it .
--[ ] ***Working test***: If the student provides a URL to verify his work is running properly, it will be a page that says “it works! Udagram, Udacity”
+-[x] ***Parameters***: The more the better, but an exaggerated number of parameters can be messy ( say, 10 or more ). 1 or 0 is definitely lacking.
+-[x] ***Resources***: This is the mandatory section of the script, we are looking for a LoadBalancer, Launch Configuration, AutoScaling group a health check, security groups and a Listener and Target Group.
+-[x] ***Outputs***: This is optional, but it would be nice to have a URL here with the Load Balancer DNS Name and “http” in front of it .
+-[x] ***Working test***: If the student provides a URL to verify his work is running properly, it will be a page that says “it works! Udagram, Udacity”
 
 Load Balancer
 
--[ ] ***Target Group***: The auto-scaling group needs to have a property that associates it with a target group. The Load Balancer will have a Listener rule associated with the same target group
--[ ] ***Health Check and Listener***: Port 80 should be used in Security groups, health checks and listeners associated with the load balancer
+-[x] ***Target Group***: The auto-scaling group needs to have a property that associates it with a target group. The Load Balancer will have a Listener rule associated with the same target group
+-[x] ***Health Check and Listener***: Port 80 should be used in Security groups, health checks and listeners associated with the load balancer
 
 Auto-Scaling
 
--[ ] ***Subnets***: Students should be using PRIV-NET ( private subnets ) for their auto-scaling instances
--[ ] ***Machine Specs***: The machine should have 10 GB or more of disk and should be a t3.small or better.
--[ ] ***SSH Key***: There shouldn’t be a ‘keyname’ property in the launch config
+-[x] ***Subnets***: Students should be using PRIV-NET ( private subnets ) for their auto-scaling instances
+-[x] ***Machine Specs***: The machine should have 10 GB or more of disk and should be a t3.small or better.
+-[x] ***SSH Key***: There shouldn’t be a ‘keyname’ property in the launch config
 
 Bonus
 
--[ ] ***Output***: Any values in the output section are a bonus
--[ ] ***Bastion Host***: Any resource of type AWS::EC2::Instance, optional, but nice to have.
+-[x] ***Output***: Any values in the output section are a bonus
+-[x] ***Bastion Host***: Any resource of type AWS::EC2::Instance, optional, but nice to have.
 
 ### b. System architecture
 
@@ -112,13 +115,15 @@ Bonus
 This shell script deploy the system architecture described
 
 ```bash
-./deploy.sh myUdagram infra.yml nw_param.json
+./deploy.sh networkstack network_config.yml nw_param.json
+./deploy.sh serversstack servers_config.yml servers_param.json
 ```
 
 Debugging:
 
 ```bash
-bash -x ./deploy.sh myUdagram infra.yml nw_param.json
+bash -x ./deploy.sh networkstack network_config.yml nw_param.json
+bash -x ./deploy.sh serversstack servers_config.yml servers_param.json
 ```
 
 ## 3. Contributing
@@ -126,4 +131,6 @@ bash -x ./deploy.sh myUdagram infra.yml nw_param.json
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+
 

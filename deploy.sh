@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# deploy.sh, describe the infra.yml
+# deploy.sh, describe the network_config.yml
 #
 # 1. Parameters should be introduced and validate
 # 2. Then, it is checked if the stack exists to update or create the stack.
