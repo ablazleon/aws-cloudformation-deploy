@@ -32,48 +32,6 @@ Parameters:
 
 
 Resources:
-  SecurityGroupLoadBalancer:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for load-balancer
-      VpcId:
-        Fn::ImportValue: !Sub "${ProjectName}-VPCID"
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
-
-  SecurityGroupWebServer:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for web server
-      VpcId:
-        Fn::ImportValue: !Sub "${ProjectName}-VPCID"
-      SecurityGroupIngress:
-      - SourceSecurityGroupId: !Ref SecurityGroupLoadBalancer
-        IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-      - SourceSecurityGroupId: !Ref SecurityGroupBastion
-        IpProtocol: tcp
-        FromPort: 22
-        ToPort: 22
-
-  SecurityGroupBastion:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for bastion server
-      VpcId:
-        Fn::ImportValue: !Sub "${ProjectName}-VPCID"
-      SecurityGroupIngress:
-      - CidrIp: 0.0.0.0/0
-        IpProtocol: tcp
-        FromPort: 22
-        ToPort: 22
-      Tags:
-        - Key: Name
-          Value: !Sub "${ProjectName} Bastion Security Group"
 
   WebAppLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
@@ -100,8 +58,6 @@ Resources:
           docker run -dit --name ${ProjectName} -p 80:80 -v "$PWD"/html:/usr/local/apache2/htdocs/ httpd:latest
       ImageId: ami-005bdb005fb00e791
       IamInstanceProfile: !Ref ListBucketInstanceProfile
-      SecurityGroups:
-      - Ref: SecurityGroupWebServer
       InstanceType: t3.medium
       BlockDeviceMappings:
       - DeviceName: "/dev/sdk"
