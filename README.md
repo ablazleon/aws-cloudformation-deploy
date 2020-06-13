@@ -112,6 +112,9 @@ Bonus
 4. Do teh server specs
 5. Do teh security groups and roles
 6. Do the other considerations
+
+THen I realize, there is a lot of compelxity and that it is better automating atesting system for it.
+
 ## 2. Usage
 
 This shell script deploy the system architecture described
