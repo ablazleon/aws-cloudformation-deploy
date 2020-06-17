@@ -109,8 +109,10 @@ Bonus
     4. aws s3 ls, to check setup
 2. Write an .sh that run the yml. I inspired from [this](!https://gist.github.com/mdjnewman/b9d722188f4f9c6bb277a37619665e77) 
 3. Try running an easy cloud formation stack
-    Just an ec2 and run the code
+    Just an ec2 and run the code: check that it runs properly
 4. Do teh server specs
+    Create a network
+    Create an autoscaling group. ANd check accesibility.
 5. Do teh security groups and roles
 6. Do the other considerations
 
