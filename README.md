@@ -47,7 +47,7 @@ One of the output exports of the CloudFormation script should be the public URL 
 
 Bonus points if you add http:// in front of the load balancer DNS Name in the output, for convenience.
 
--[x] Other Considerations
+- [x] Other Considerations
 
 
 You can deploy your servers with an SSH Key into Public subnets while you are creating the script. This helps with troubleshooting. Once done, move them to your private subnets and remove the SSH Key from your Launch Configuration.
@@ -75,10 +75,10 @@ Last thing: Remember to delete your CloudFormation stack when you're done to avo
 
 The basics
 
--[x] ***Parameters***: The more the better, but an exaggerated number of parameters can be messy ( say, 10 or more ). 1 or 0 is definitely lacking.
--[x] ***Resources***: This is the mandatory section of the script, we are looking for a LoadBalancer, Launch Configuration, AutoScaling group a health check, security groups and a Listener and Target Group.
--[x] ***Outputs***: This is optional, but it would be nice to have a URL here with the Load Balancer DNS Name and “http” in front of it .
--[x] ***Working test***: If the student provides a URL to verify his work is running properly, it will be a page that says “it works! Udagram, Udacity”
+- [x] ***Parameters***: The more the better, but an exaggerated number of parameters can be messy ( say, 10 or more ). 1 or 0 is definitely lacking.
+- [x] ***Resources***: This is the mandatory section of the script, we are looking for a LoadBalancer, Launch Configuration, AutoScaling group a health check, security groups and a Listener and Target Group.
+- [x] ***Outputs***: This is optional, but it would be nice to have a URL here with the Load Balancer DNS Name and “http” in front of it .
+- [x] ***Working test***: If the student provides a URL to verify his work is running properly, it will be a page that says “it works! Udagram, Udacity”
 
 Load Balancer
 
@@ -107,8 +107,9 @@ Bonus
     2. Install aws cli, and run in powershell in this folder "aws --version"
     3. aws configure, with secret key of the user created
     4. aws s3 ls, to check setup
-2. Try running an easy cloud formation stack
-3. Write an .sh that run the yml
+2. Write an .sh that run the yml. I inspired from [this](!https://gist.github.com/mdjnewman/b9d722188f4f9c6bb277a37619665e77) 
+3. Try running an easy cloud formation stack
+    Just an ec2 and run the code
 4. Do teh server specs
 5. Do teh security groups and roles
 6. Do the other considerations
