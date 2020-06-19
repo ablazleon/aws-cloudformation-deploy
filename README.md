@@ -112,7 +112,8 @@ Bonus
     Just an ec2 and run the code: check that it runs properly
 4. Do teh server specs
     Create a network
-    Create an autoscaling group. ANd check accesibility.
+    Create an autoscaling group. And check accesibility.
+    As the autoscaling group alone does not work, it is looked for a designer instance.
 5. Do teh security groups and roles
 6. Do the other considerations
 
