@@ -46,7 +46,7 @@ Resources:
           cd /var/www/html
           aws s3 cp s3://udacity-demo-1/udacity.zip .
           unzip -o udacity.zip
-      ImageId: ami-005bdb005fb00e791
+      ImageId: ami-003634241a8fcdec0
       IamInstanceProfile: !Ref ListBucketInstanceProfile
       InstanceType: t3.medium
       BlockDeviceMappings:
