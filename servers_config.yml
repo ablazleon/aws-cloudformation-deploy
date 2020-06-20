@@ -26,7 +26,7 @@ Parameters:
     Default: 's3://udacity-demo-1/udacity.zip'
 
   KeyPairName:
-    Description: Name of key-pair (PEM) file.
+    Description: Name of key-pair file.
     Type: String
     Default: 'env'
 
@@ -38,14 +38,11 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          apt-get update -y
-          apt-get install unzip awscli -y
-          apt-get install apache2 -y
-          systemctl start apache2.service
+          sudo apt-get update -y
+          sudo apt-get install unzip awscli -y
+          sudo apt-get install apache2 -y
+          sudo systemctl start apache2.service
           cd /var/www/html
-          # aws s3 cp s3://udacity-demo-1/udacity.zip .
-          # unzip -o udacity.zip
-          # I cannot access to this s3 bucket
           echo '<h1> it works! Udagram, Udacity </h1> <p> <h2> Author: Adrian </h2> </p>' > index.html
           systemctl start apache2.service
       ImageId: ami-003634241a8fcdec0
@@ -55,21 +52,6 @@ Resources:
       - DeviceName: "/dev/sdk"
         Ebs:
           VolumeSize: 10
-
-  WebAppTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTP
-      HealthCheckTimeoutSeconds: 8
-      HealthyThresholdCount: 2
-      Port: 80
-      Protocol: HTTP
-      UnhealthyThresholdCount: 5
-      VpcId:
-        Fn::ImportValue:
-          Fn::Sub: "${ProjectName}-VPCID"
 
   WebAppGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -87,35 +69,6 @@ Resources:
             - "GroupMaxSize"
       TargetGroupARNs:
       - Ref: "WebAppTargetGroup"
-
-  LoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Subnets:
-      - Fn::ImportValue: !Sub "${ProjectName}-PUB-SN-1"
-      - Fn::ImportValue: !Sub "${ProjectName}-PUB-SN-2"
-
-  Listener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-      - Type: "forward"
-        TargetGroupArn: !Ref WebAppTargetGroup
-      LoadBalancerArn: !Ref LoadBalancer
-      Port: 80
-      Protocol: "HTTP"
-
-  ALBListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-      - Type: "forward"
-        TargetGroupArn: !Ref WebAppTargetGroup
-      Conditions:
-      - Field: "path-pattern"
-        Values: ["/"]
-      ListenerArn: !Ref Listener
-      Priority: 1
 
   BastionPublicSubnet1:
     Type: AWS::EC2::Instance

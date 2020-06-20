@@ -5,6 +5,8 @@
  ***Credits***
 Udacity Cloud DevOps Nanodegree Program
 
+To propose this code I inspired myself in teh code the teacher provided and other references as aws templates and shell script templated to automate the update and creation of stacks.
+
 ## 1. Get Started
 ### a. Requirements. 
 #### I. Specs

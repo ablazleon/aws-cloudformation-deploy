@@ -39,20 +39,9 @@ fi
 ##### check if stack exist
 aws cloudformation describe-stacks --stack-name $stack_name > /dev/null 2>&1
 response=$?
-if [ $response -eq 255 ]
-then
-    echo
-    echo 'Creating stack...'
-    cfn_cmd='create-stack'
-elif [ $response -eq 0 ]
-then
-    echo
-    echo 'Updating stack...'
-    cfn_cmd='update-stack'
-else
-    echo 'Unknown exception ...exiting!'
-    exit 1
-fi
+echo
+echo 'Creating stack...'
+cfn_cmd='create-stack'
 
 
 ##### execute aws command

@@ -13,6 +13,7 @@ Parameters:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
+    Default: 'env'
   InstanceType:
     Description: WebServer EC2 instance type
     Type: String
@@ -363,7 +364,10 @@ Resources:
     Properties:
       InstanceType:
         Ref: InstanceType
-      SecurityGroups:
+      SubnetId:
+        Fn::ImportValue:
+          Fn::Sub: "HAWebApp-PUB-SN-1"
+      SecurityGroupsIds:
       - Ref: InstanceSecurityGroup
       KeyName:
         Ref: KeyName
@@ -379,6 +383,8 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable SSH access via port 22
+      VpcId:
+        Fn::ImportValue: !Sub "HAWebApp-VPCID"
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '22'
