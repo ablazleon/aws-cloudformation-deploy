@@ -43,8 +43,11 @@ Resources:
           apt-get install apache2 -y
           systemctl start apache2.service
           cd /var/www/html
-          aws s3 cp s3://udacity-demo-1/udacity.zip .
-          unzip -o udacity.zip
+          # aws s3 cp s3://udacity-demo-1/udacity.zip .
+          # unzip -o udacity.zip
+          # I cannot access to this s3 bucket
+          echo '<h1> it works! Udagram, Udacity </h1> <p> <h2> Author: Adrian </h2> </p>' > index.html
+          systemctl start apache2.service
       ImageId: ami-003634241a8fcdec0
       IamInstanceProfile: !Ref ListBucketInstanceProfile
       InstanceType: t3.medium
