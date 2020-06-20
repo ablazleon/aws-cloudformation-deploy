@@ -2,6 +2,14 @@
 
 ***aws-cloudformation-deploy*** script allows deploying a High-Availability Web App using CloudFormation.
 
+This is the load balancer url:
+
+http://myser-loadb-1870nrug4j4fp-219552044.us-west-2.elb.amazonaws.com/
+
+And this is the result I obtained.
+
+![Apaches answer the request]()
+
  ***Credits***
 Udacity Cloud DevOps Nanodegree Program
 
