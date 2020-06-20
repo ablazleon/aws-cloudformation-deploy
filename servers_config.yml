@@ -23,7 +23,7 @@ Parameters:
   S3CodeRepo:
     Description: Full S3 path and file name of zipped file
     Type: String
-    Default: 's3://udacity-s3/devops/udacity.zip'
+    Default: 's3://udacity-demo-1/udacity.zip'
 
   KeyPairName:
     Description: Name of key-pair (PEM) file.
