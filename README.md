@@ -8,7 +8,7 @@ http://myser-loadb-1870nrug4j4fp-219552044.us-west-2.elb.amazonaws.com/
 
 And this is the result I obtained.
 
-![Apaches answer the request]()
+![Apaches answer the request](https://github.com/ablazleon/aws-cloudformation-deploy/blob/master/test/2_servers_spec/6_lbLog.png)
 
  ***Credits***
 Udacity Cloud DevOps Nanodegree Program
