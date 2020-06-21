@@ -4,7 +4,7 @@
 
 This is the load balancer url:
 
-http://myser-loadb-1870nrug4j4fp-219552044.us-west-2.elb.amazonaws.com/
+http://myser-loadb-1q5pimb3rxh5x-1184854684.us-west-2.elb.amazonaws.com/
 
 And this is the result I obtained.
 
