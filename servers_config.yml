@@ -85,7 +85,9 @@ Resources:
           sudo apt-get install apache2 -y
           sudo systemctl start apache2.service
           cd /var/www/html
-          echo '<h1> it works! Udagram, Udacity </h1> <p> <h2> Author: Adrian </h2> </p>' > index.html
+          systemctl enable apache2
+          rm index.html
+          wget -P https://s3.us-east-2.amazonaws.com/test-udagram-1/index.html
           systemctl start apache2.service
       ImageId: ami-003634241a8fcdec0
       IamInstanceProfile: !Ref ListBucketInstanceProfile
