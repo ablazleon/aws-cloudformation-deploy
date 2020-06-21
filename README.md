@@ -13,7 +13,7 @@ And this is the result I obtained.
  ***Credits***
 Udacity Cloud DevOps Nanodegree Program
 
-To propose this code I inspired myself in teh code the teacher provided and other references as aws templates and shell script templated to automate the update and creation of stacks.
+To propose this code I inspired myself in the code the teacher provided and other references as aws templates and shell script templates (from the aws official [documentation](https://aws.amazon.com/cloudformation/resources/templates/)) to automate the update and creation of stacks.
 
 ## 1. Get Started
 ### a. Requirements. 
